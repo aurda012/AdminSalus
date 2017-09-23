@@ -103,7 +103,7 @@ class Fireadmin extends Component {
       console.log("Next SUB: "+nextProps.params.sub);
       console.log("Prev SUB : "+this.props.params.sub);
       //if(this.state.lastSub==)
-      if(nextProps.params.sub==this.props.params.sub){
+      if(nextProps.params.sub===this.props.params.sub){
           console.log("update now");
           this.resetDataFunction();
       }
@@ -260,7 +260,7 @@ class Fireadmin extends Component {
       //Elements - Object that don't match in any prefix for Join - They are represented as buttons.
 
       //If record is of type array , then there is no need for parsing, just directly add the record in the arrays list
-      if(Common.getClass(records)=="Array"){
+      if(Common.getClass(records)==="Array"){
           //Get the last name
           console.log("This is array");
           var subPath=this.props.params&&this.props.params.sub?this.props.params.sub:""
@@ -273,7 +273,7 @@ class Fireadmin extends Component {
 
           }
           //this.setState({"arrays":this.state.arrays.push(records)})
-      }else if(Common.getClass(records)=="Object"){
+      }else if(Common.getClass(records)==="Object"){
           //Parse the Object record
           for (var key in records){
               if (records.hasOwnProperty(key)) {
@@ -281,10 +281,10 @@ class Fireadmin extends Component {
                   console.log(key + "'s class is: " + currentElementClasss);
 
                   //Add the items by their type
-                  if(currentElementClasss=="Array"){
+                  if(currentElementClasss==="Array"){
                       //Add it in the arrays  list
                       arrays[key]=records[key];
-                  }else if(currentElementClasss=="Object"){
+                  }else if(currentElementClasss==="Object"){
                       //Add it in the elements list
                       var isElementMentForTheArray=false; //Do we have to put this object in the array
                       for (var i=0;i<Config.adminConfig.prefixForJoin.length;i++){
@@ -312,7 +312,7 @@ class Fireadmin extends Component {
                   }
               }
           }
-      }if(Common.getClass(records)=="String"){
+      }if(Common.getClass(records)==="String"){
         console.log("We have direct value of string");
         directValue=records;
       }
@@ -334,7 +334,7 @@ class Fireadmin extends Component {
       newState.arrayNames=arrayNames;
       newState.fields=fields;
       newState.arrays=arrays;
-      newState.isJustArray=Common.getClass(records)=="Array";
+      newState.isJustArray=Common.getClass(records)==="Array";
       newState.elements=elements;
       newState.elementsInArray=elementsInArray;
       newState.directValue=directValue;
@@ -396,12 +396,12 @@ class Fireadmin extends Component {
      console.log("Object to insert");
      console.log(objToInsert);
 
-     if(objToInsert==null){
+     if(objToInsert===null){
        //Notify
        this.setState({notifications:[{type:"danger",content:"We couldn't find object to insert. Check your schema settings."}]});
        this.refreshDataAndHideNotification(false,5000);
      }else{
-       if(Config.adminConfig.methodOfInsertingNewObjects=="timestamp"){
+       if(Config.adminConfig.methodOfInsertingNewObjects==="timestamp"){
          console.log("Insert by timesetamp");
          var keyToCreate=usedPrefix+Date.now();
          console.log("Key: "+keyToCreate);
@@ -466,10 +466,10 @@ class Fireadmin extends Component {
       var firebasePath=(this.props.route.path.replace("/fireadmin/","").replace(":sub",""))+(this.props.params&&this.props.params.sub?this.props.params.sub:"").replace(/\+/g,"/");
       console.log("firebasePath from update:"+firebasePath)
       console.log('Update '+key+" into "+value);
-      if(key=="DIRECT_VALUE_OF_CURRENT_PATH"){
+      if(key==="DIRECT_VALUE_OF_CURRENT_PATH"){
         console.log("DIRECT_VALUE_OF_CURRENT_PATH")
         firebase.database().ref(firebasePath).set(value);
-      }else if(key=="NAME_OF_THE_NEW_KEY"||key=="VALUE_OF_THE_NEW_KEY"){
+      }else if(key==="NAME_OF_THE_NEW_KEY"||key==="VALUE_OF_THE_NEW_KEY"){
         console.log("THE_NEW_KEY")
         var updateObj={};
         updateObj[key]=value;
@@ -667,13 +667,13 @@ class Fireadmin extends Component {
       var items=subPath.split("+");
       var path="/fireadmin/"
       return (<div>{items.map((item,index)=>{
-        if(index==0){
+        if(index===0){
           path+=item;
         }else{
           path+="+"+item;
         }
 
-        return (<Link className="navbar-brand" to={path}>{item} <span className="breadcrumbSeparator">{index==items.length-1?"":"/"}</span><div className="ripple-container"></div></Link>)
+        return (<Link className="navbar-brand" to={path}>{item} <span className="breadcrumbSeparator">{index===items.length-1?"":"/"}</span><div className="ripple-container"></div></Link>)
       })}</div>)
   }
 
@@ -765,7 +765,10 @@ class Fireadmin extends Component {
                   <form className="form-horizontal">
                     <div style={{ textAlign: 'center' }}>
                       {this.state.fieldsAsArray?this.state.fieldsAsArray.map((item)=>{
-                        return (<Fields key={item.theKey+this.state.lastSub} style={{ textAlign: 'center' }} updateAction={this.updateAction}  theKey={item.theKey} value={item.value} />)
+                        if (item.theKey !== 'uid') {
+                          return (<Fields key={item.theKey + this.state.lastSub} style={{textAlign: 'center'}}
+                                          updateAction={this.updateAction} theKey={item.theKey} value={item.value}/>)
+                        }
                       }):"" }
                     </div>
 

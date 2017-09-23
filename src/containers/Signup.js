@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Alert } from 'react-bootstrap';
 import firebase from '../config/database'
-import Config from '../config/app';
 import { browserHistory } from 'react-router';
 
 class Signup extends Component {
@@ -18,6 +17,7 @@ class Signup extends Component {
             expYear: 2020,
             expMonth: 12,
             name: '',
+            last4: '',
         };
         this.handleChangeUsername = this.handleChangeUsername.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -89,6 +89,7 @@ class Signup extends Component {
                 error: error
             });
         };
+
         fetch('https://api.stripe.com/v1/customers/' + cust_id + '/sources', {
             method: 'POST',
             headers: {
@@ -128,8 +129,6 @@ class Signup extends Component {
             body: 'customer=' + cust_id + '&plan=' + this.state.plan
         }).then((response) => response.json()).then((responseJson) => {
             if (responseJson.error) {
-                var errorCode = responseJson.error.code;
-                var errorMessage = responseJson.error.message;
                 console.log(responseJson.error.message);
                 displayError(responseJson.error.message);
                 this.deleteCustomer(cust_id);
@@ -138,7 +137,7 @@ class Signup extends Component {
                 console.log(responseJson);
             }
         }).catch((error) => {
-            console.error(error);
+            console.log(error);
         });
     }
     createFireBaseUser(cust_id) {
@@ -149,6 +148,7 @@ class Signup extends Component {
         };
         const company = this.state.companyName;
         const phoneNum = this.state.phoneNumber;
+        const last4 = this.state.last4;
         firebase.auth().createUserWithEmailAndPassword(this.state.username, this.state.password).then(function(data) {
             console.log("Yes, user is logged in");
             var vendor = {
@@ -164,16 +164,19 @@ class Signup extends Component {
                     image : "https://firebasestorage.googleapis.com/v0/b/salus-4b513.appspot.com/o/SalusPlaceholder.png?alt=media&token=05dc65f5-f5bc-481b-8fb9-b2aee4b1dffc",
                     points : 0,
                     title : "",
+                    uid: data.uid,
                   },
                   offer2 : {
                     image : "https://firebasestorage.googleapis.com/v0/b/salus-4b513.appspot.com/o/SalusPlaceholder.png?alt=media&token=05dc65f5-f5bc-481b-8fb9-b2aee4b1dffc",
                     points : 0,
                     title : "",
+                    uid: data.uid,
                   },
                   offer3 : {
                     image : "https://firebasestorage.googleapis.com/v0/b/salus-4b513.appspot.com/o/SalusPlaceholder.png?alt=media&token=05dc65f5-f5bc-481b-8fb9-b2aee4b1dffc",
                     points : 0,
                     title : "",
+                    uid: data.uid,
                   }
                 },
             };
@@ -181,8 +184,8 @@ class Signup extends Component {
             browserHistory.push('/');
         }).catch(function(error) {
             // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
+            const errorCode = error.code;
+            const errorMessage = error.message;
             console.log(error.message);
             displayError(error.message);
         });
@@ -193,7 +196,7 @@ class Signup extends Component {
                 error: error
             });
         };
-        if (username == '' || password == '') {
+        if (username === '' || password === '') {
             displayError('username and password are required.');
         } else if (password.length < 6) {
             displayError('Password Minimum Length – 6.');

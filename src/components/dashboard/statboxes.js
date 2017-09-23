@@ -98,15 +98,15 @@ pie4.options = {
 
 const Statboxes = () => (
   <div className="row">
-    <div className="col-md-3">
+    <div className="col-lg-3 col-sm-6">
       <div className="card">
         <div className="box-top" style={{ height: '100px', padding: "32px 25px", fontSize: "40px", lineHeight: "40px", textAlign: "center" }}>
-          <span>46</span>
+          <span>0</span>
         </div>
         <div className="box-info" style={{ position: "absolute", width: "100%", top: "40%", marginTop: "-12px", textAlign: "center" }}>
           <span style={{ height: "24px", display: "inline-block", padding: "4px 10px", textTransform: "uppercase", lineHeight: "14px", backgroundColor: "#fff", border: "1px solid rgba(0,0,0,.15)", borderRadius: "1em" }}>Redeemed today</span>
         </div>
-        <div className="card-header card-header-icon" data-background-color="rose" style={{ position: "absolute", marginLeft: "-30px", top: "61%", left: "50%", paddingBottom: "10px", marginTop: "-10", textAlign: "center" }}>
+        <div className="card-header card-header-icon" data-background-color="rose" style={{ position: "absolute", marginLeft: "-30px", top: "61%", left: "50%", paddingBottom: "10px", marginTop: "-10px", textAlign: "center" }}>
           <i className="material-icons" style={{ fontSize: "36px" }}>touch_app</i>
         </div>
         <div className="box-bottom" style={{ height: '150px', borderTop: "1px solid rgba(0,0,0,.15)", padding: "", fontSize: "40px", lineHeight: "40px", textAlign: "center" }}>
@@ -114,15 +114,15 @@ const Statboxes = () => (
         </div>
       </div>
     </div>
-    <div className="col-md-3">
+    <div className="col-lg-3 col-sm-6">
       <div className="card">
         <div className="box-top" style={{ height: '100px', padding: "32px 25px", fontSize: "40px", lineHeight: "40px", textAlign: "center" }}>
-          <span>117</span>
+          <span>0</span>
         </div>
         <div className="box-info" style={{ position: "absolute", width: "100%", top: "40%", marginTop: "-12px", textAlign: "center" }}>
           <span style={{ height: "24px", display: "inline-block", padding: "4px 10px", textTransform: "uppercase", lineHeight: "14px", backgroundColor: "#fff", border: "1px solid rgba(0,0,0,.15)", borderRadius: "1em" }}>Redeemed this week</span>
         </div>
-        <div className="card-header card-header-icon" data-background-color="rose" style={{ position: "absolute", marginLeft: "-30px", top: "61%", left: "50%", paddingBottom: "10px", marginTop: "-10", textAlign: "center" }}>
+        <div className="card-header card-header-icon" data-background-color="rose" style={{ position: "absolute", marginLeft: "-30px", top: "61%", left: "50%", paddingBottom: "10px", marginTop: "-10px", textAlign: "center" }}>
           <i className="material-icons" style={{ fontSize: "36px" }}>trending_up</i>
         </div>
         <div className="box-bottom" style={{ height: '150px', borderTop: "1px solid rgba(0,0,0,.15)", padding: "", fontSize: "40px", lineHeight: "40px", textAlign: "center" }}>
@@ -130,15 +130,15 @@ const Statboxes = () => (
         </div>
       </div>
     </div>
-    <div className="col-md-3">
+    <div className="col-lg-3 col-sm-6">
       <div className="card">
         <div className="box-top" style={{ height: '100px', padding: "32px 25px", fontSize: "40px", lineHeight: "40px", textAlign: "center" }}>
-          <span>231</span>
+          <span>0</span>
         </div>
         <div className="box-info" style={{ position: "absolute", width: "100%", top: "40%", marginTop: "-12px", textAlign: "center" }}>
           <span style={{ height: "24px", display: "inline-block", padding: "4px 10px", textTransform: "uppercase", lineHeight: "14px", backgroundColor: "#fff", border: "1px solid rgba(0,0,0,.15)", borderRadius: "1em" }}>Redeemed this month</span>
         </div>
-        <div className="card-header card-header-icon" data-background-color="rose" style={{ position: "absolute", marginLeft: "-30px", top: "61%", left: "50%", paddingBottom: "10px", marginTop: "-10", textAlign: "center" }}>
+        <div className="card-header card-header-icon" data-background-color="rose" style={{ position: "absolute", marginLeft: "-30px", top: "61%", left: "50%", paddingBottom: "10px", marginTop: "-10px", textAlign: "center" }}>
           <i className="material-icons" style={{ fontSize: "36px" }}>today</i>
         </div>
         <div className="box-bottom" style={{ height: '150px', borderTop: "1px solid rgba(0,0,0,.15)", padding: "", fontSize: "40px", lineHeight: "40px", textAlign: "center" }}>
@@ -146,15 +146,15 @@ const Statboxes = () => (
         </div>
       </div>
     </div>
-    <div className="col-md-3">
+    <div className="col-lg-3 col-sm-6">
       <div className="card">
         <div className="box-top" style={{ height: '100px', padding: "32px 25px", fontSize: "40px", lineHeight: "40px", textAlign: "center" }}>
-          <span>458</span>
+          <span>0</span>
         </div>
         <div className="box-info" style={{ position: "absolute", width: "100%", top: "40%", marginTop: "-12px", textAlign: "center" }}>
           <span style={{ height: "24px", display: "inline-block", padding: "4px 10px", textTransform: "uppercase", lineHeight: "14px", backgroundColor: "#fff", border: "1px solid rgba(0,0,0,.15)", borderRadius: "1em" }}>Total Redeemed</span>
         </div>
-        <div className="card-header card-header-icon" data-background-color="rose" style={{ position: "absolute", marginLeft: "-30px", top: "61%", left: "50%", paddingBottom: "10px", marginTop: "-10", textAlign: "center" }}>
+        <div className="card-header card-header-icon" data-background-color="rose" style={{ position: "absolute", marginLeft: "-30px", top: "61%", left: "50%", paddingBottom: "10px", marginTop: "-10px", textAlign: "center" }}>
           <i className="material-icons" style={{ fontSize: "36px" }}>group</i>
         </div>
         <div className="box-bottom" style={{ height: '150px', borderTop: "1px solid rgba(0,0,0,.15)", padding: "", fontSize: "40px", lineHeight: "40px", textAlign: "center" }}>

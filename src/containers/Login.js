@@ -109,7 +109,7 @@ class Login extends Component {
                   </div>
                   <div className="text-center" style={{ marginTop: "10px" }}>
 
-                    <label>Don't have an account?</label> <a href="/#/signup">Signup Here.</a>
+                    <label>Don't have an account?</label> <a href="/signup">Signup Here.</a>
 
                   </div>
                 </div>

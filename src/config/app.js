@@ -1,11 +1,11 @@
 //FireBase
 exports.firebaseConfig = {
-  apiKey: "AIzaSyAYmgAr8P8OdAL9uFqupfkKjlh5UAsOISs",
-  authDomain: "salus-4b513.firebaseapp.com",
-  databaseURL: "https://salus-4b513.firebaseio.com",
-  projectId: "salus-4b513",
-  storageBucket: "",
-  messagingSenderId: "275888439009"
+  apiKey: "AIzaSyAjmdDS4PzF3XIHcOHVy1p7F9yjC1CDEqI",
+  authDomain: "salus-18497.firebaseapp.com",
+  databaseURL: "https://salus-18497.firebaseio.com",
+  projectId: "salus-18497",
+  storageBucket: "salus-18497.appspot.com",
+  messagingSenderId: "452396243212"
 };
 
 //App setup

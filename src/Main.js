@@ -3,13 +3,13 @@ import Public from './layout/Public'
 import Signup from './containers/Signup'
 import Login from './containers/Login'
 
-import { Router, Route, hashHistory, IndexRoute } from 'react-router'
+import { Router, Route, browserHistory, IndexRoute } from 'react-router'
 
 class Main extends Component {
 
   render() {
     return (
-      <Router history={hashHistory}>
+      <Router history={browserHistory}>
         <Route path="/" component={Public}>
           {/* make them children of `Master` */}
           <IndexRoute component={Login}/>

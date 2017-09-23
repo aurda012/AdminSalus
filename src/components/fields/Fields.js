@@ -19,7 +19,7 @@ class Fields extends Component {
   getOptions(key){
     var options=Config.adminConfig.optionsForSelect;
     for (var i = 0; i < options.length; i++) {
-      if(options[i].key==key){
+      if(options[i].key===key){
         return options[i].options;
       }
     }

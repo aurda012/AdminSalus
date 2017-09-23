@@ -36,7 +36,7 @@ class Table extends Component {
         console.log("Inside type is "+type);
 
         //OBJECTS INSIDE
-        if(type=="Object"){
+        if(type==="Object"){
 
           //In CASE we have OBJECT as array items
           for (var key in this.props.data[i]) {
@@ -58,7 +58,7 @@ class Table extends Component {
         }
 
         //STRING INSIDE
-        else if(type=="String"){
+        else if(type==="String"){
           headers=["Value"];
           headersCounter["Value"]=1;
           break;
@@ -77,7 +77,7 @@ class Table extends Component {
      console.log("numHeadersCounter "+numHeadersCounter);
 
      //ARRAYS INSIDE
-     if(numHeadersCounter==0){
+     if(numHeadersCounter===0){
        console.log("Make it ArtificialArray");
        headers=["Items"];
        headersCounter["Items"]=1;
@@ -145,12 +145,12 @@ class Table extends Component {
           }else{
             //Normal value
             //But can be string
-            if(this.state.type=="String"){
-                return subindex==0?(<td><Link to={theLink}>{item}</Link></td>):(<td>{item}</td>)
-            }  if(this.state.type=="ArtificialArray"){
-                  return subindex==0?(<td><Link to={theLink}>{"Item "+(index+1)}</Link></td>):(<td>{"Item "+(index+1)}</td>)
+            if(this.state.type==="String"){
+                return subindex===0?(<td><Link to={theLink}>{item}</Link></td>):(<td>{item}</td>)
+            }  if(this.state.type==="ArtificialArray"){
+                  return subindex===0?(<td><Link to={theLink}>{"Item "+(index+1)}</Link></td>):(<td>{"Item "+(index+1)}</td>)
               }else{
-                return subindex==0?(<td><Link to={theLink}>{item[key]}</Link></td>):(<td>{item[key]}</td>)
+                return subindex===0?(<td><Link to={theLink}>{item[key]}</Link></td>):(<td>{item[key]}</td>)
             }
 
           }

@@ -16,7 +16,7 @@ class CheckBox extends Component {
     //Find if we have this elemet already selected
     var selectedItems=this.state.values;
     var indexOfItem=selectedItems.indexOf(event.target.value);
-    if(indexOfItem==-1){
+    if(indexOfItem===-1){
       //It doesn't exist, add it
       selectedItems.push(event.target.value);
     }else{

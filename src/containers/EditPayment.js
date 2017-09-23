@@ -1,56 +1,55 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { composeWithTracker } from 'react-komposer';
 import { Row, Col, Alert } from 'react-bootstrap';
 import firebase from '../config/database'
-import Image from '../components/fields/Image.js'
-import Config from '../config/app';
-import { browserHistory } from 'react-router';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-class EditPayment extends Component {
+class Vendors extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       password: '',
-      companyName: '',
-      phoneNumber: '',
       error: '',
-      plan: '',
-      cardNumber: '4242424242424242',
-      expYear: 2020,
-      expMonth: 12,
+      cardNumber: '',
+      expYear: '',
+      expMonth: '',
       name: '',
       user: {},
-      vendor: {},
-      companyPic: "https://firebasestorage.googleapis.com/v0/b/salus-4b513.appspot.com/o/SalusPlaceholder.png?alt=media&token=05dc65f5-f5bc-481b-8fb9-b2aee4b1dffc",
+      vendors: {},
     };
-    this.authListener = this.authListener.bind(this);
-    this.handleChangeUsername = this.handleChangeUsername.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.handleChangeCompany = this.handleChangeCompany.bind(this);
-    this.handleChangePhone = this.handleChangePhone.bind(this);
-    this.handleChangePicture = this.handleChangePicture.bind(this);
+
     this.handleChangeCardNumber = this.handleChangeCardNumber.bind(this);
     this.handleChangeExpMonth = this.handleChangeExpMonth.bind(this);
     this.handleChangeExpYear = this.handleChangeExpYear.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.authenticate = this.authenticate.bind(this);
   }
 
   componentDidMount() {
     this.authListener();
   }
 
+  componentWillMount() {
+  }
+
   authListener(){
     const setUser=(user)=>{
       this.setState({user:user})
     };
+
     const setVendor=(vendor)=>{
       this.setState({
-        vendor:vendor,
+        vendor: vendor,
+        companyPic: vendor.image,
         companyName: vendor.name,
         phoneNumber: vendor.phone,
-        companyPic: vendor.image,
+        website: vendor.website,
+        street: vendor.street,
+        city: vendor.city,
+        state: vendor.state,
+        zip: vendor.zip,
       })
     };
 
@@ -61,8 +60,11 @@ class EditPayment extends Component {
         console.log("User has Logged  in Master");
         var vendorInfo = firebase.database().ref(`vendors/${user.uid}`);
         vendorInfo.on('value', function(snapshot) {
-          setVendor(snapshot.val());
-          console.log(snapshot.val());
+          if (snapshot) {
+            const vendor = snapshot.val();
+            setVendor(vendor);
+            console.log()
+          }
         });
       } else {
         // No user is signed in.
@@ -71,49 +73,22 @@ class EditPayment extends Component {
     });
   }
 
-  // vendorListener(){
-  //   const setVendor=(vendor)=>{
-  //     this.setState({vendor:vendor})
-  //   };
-  //
-  //   firebase.database().ref(`vendors/${this.state.user.uid}`).on('value', function(snapshot) {
-  //     if (snapshot) {
-  //       setVendor(snapshot.val());
-  //       // User is signed in.
-  //       console.log("Vendor Set");
-  //     } else {
-  //       // No user is signed in.
-  //       console.log("Vendor Not Set");
-  //     }
-  //   });
-  // }
+  defaultCard(card_id) {
+    fetch('https://api.stripe.com/v1/customers/' + this.state.vendor.cust_id + '/default_source', {
+      method: 'Post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer sk_test_7JptRhoLDP2UzOEaPnaDUmQi'
+      },
+      body: 'default_source=' + card_id
+    }).then((response) => response.json()).then((responseJson) => {
+      console.log(responseJson);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
 
-  handleChangeUsername(event) {
-    this.setState({
-      username: event.target.value
-    });
-    console.log(event.target.value);
-  }
-  handleChangePicture(event) {
-    this.setState({
-      companyPic: event.target.value
-    });
-  }
-  handleChangePassword(event) {
-    this.setState({
-      password: event.target.value
-    });
-  }
-  handleChangeCompany(event) {
-    this.setState({
-      companyName: event.target.value
-    });
-  }
-  handleChangePhone(event) {
-    this.setState({
-      phoneNumber: event.target.value
-    });
-  }
   handleChangeCardNumber(event) {
     this.setState({
       cardNumber: event.target.value
@@ -131,193 +106,12 @@ class EditPayment extends Component {
   }
   handleSubmit(event) {
     //alert('Username: ' + this.state.username+ " Password: "+this.state.password);
-    this.authenticate(this.state.username, this.state.password, this.state.companyName, this.state.phoneNumber);
+    this.updateCard();
     event.preventDefault();
   }
 
-  getDataFromFirebase(firebasePath){
-
-  }
-
-  updateAction(key,value,dorefresh=false){
-    var firebasePath=(this.props.route.path.replace("/fireadmin/","").replace(":sub",""))+(this.props.params&&this.props.params.sub?this.props.params.sub:"").replace(/\+/g,"/");
-    console.log("firebasePath from update:"+firebasePath)
-    console.log('Update '+key+" into "+value);
-    if(key=="DIRECT_VALUE_OF_CURRENT_PATH"){
-      console.log("DIRECT_VALUE_OF_CURRENT_PATH")
-      firebase.database().ref(firebasePath).set(value);
-    }else if(key=="NAME_OF_THE_NEW_KEY"||key=="VALUE_OF_THE_NEW_KEY"){
-      console.log("THE_NEW_KEY")
-      var updateObj={};
-      updateObj[key]=value;
-      this.setState(updateObj);
-      console.log(updateObj);
-    }else{
-      console.log("Normal update")
-      firebase.database().ref(firebasePath+"/"+key).set(value).then(()=>{
-        console.log("Data is updated");
-        console.log("Do refresh "+dorefresh);
-        if(dorefresh){
-          this.resetDataFunction();
-        }
-      });
-    }
-  }
-
-  deleteCustomer(cust_id) {
-    fetch('https://api.stripe.com/v1/customers/' + cust_id, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer sk_test_7JptRhoLDP2UzOEaPnaDUmQi'
-      },
-    }).then((response) => response.json()).then((responseJson) => {
-      console.log(responseJson);
-    }).catch((error) => {
-      console.error(error);
-    });
-  }
-  createCard(cust_id) {
-    const displayError = (error) => {
-      this.setState({
-        error: error
-      });
-    };
-    fetch('https://api.stripe.com/v1/customers/' + cust_id + '/sources', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer sk_test_7JptRhoLDP2UzOEaPnaDUmQi'
-      },
-      body: 'source[object]=card&source[number]=' + this.state.cardNumber + '&source[exp_month]=' + this.state.expMonth + '&source[exp_year]=' + this.state.expYear
-    }).then((response) => response.json()).then((responseJson) => {
-      if (responseJson.error) {
-        var errorCode = responseJson.error.code;
-        var errorMessage = responseJson.error.message;
-        console.log(responseJson.error.message);
-        displayError(responseJson.error.message);
-        this.deleteCustomer(cust_id);
-      } else {
-        this.createSubscriptions(cust_id);
-        console.log(responseJson);
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-  }
-  createSubscriptions(cust_id) {
-    const displayError = (error) => {
-      this.setState({
-        error: error
-      });
-    };
-    fetch('https://api.stripe.com/v1/subscriptions', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer sk_test_7JptRhoLDP2UzOEaPnaDUmQi'
-      },
-      body: 'customer=' + cust_id + '&plan=' + this.state.plan
-    }).then((response) => response.json()).then((responseJson) => {
-      if (responseJson.error) {
-        var errorCode = responseJson.error.code;
-        var errorMessage = responseJson.error.message;
-        console.log(responseJson.error.message);
-        displayError(responseJson.error.message);
-        this.deleteCustomer(cust_id);
-      } else {
-        this.createFireBaseUser(cust_id);
-        console.log(responseJson);
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-  }
-  createFireBaseUser(cust_id) {
-    const displayError = (error) => {
-      this.setState({
-        error: error
-      });
-    };
-    const company = this.state.companyName;
-    const phoneNum = this.state.phoneNumber;
-    firebase.auth().createUserWithEmailAndPassword(this.state.username, this.state.password).then(function(data) {
-      console.log("Yes, user is logged in");
-      var vendor = {
-        website: "",
-        cust_id: cust_id,
-        image : "https://firebasestorage.googleapis.com/v0/b/salus-4b513.appspot.com/o/SalusPlaceholder.png?alt=media&token=05dc65f5-f5bc-481b-8fb9-b2aee4b1dffc",
-        name: company,
-        phone: phoneNum,
-        address: "",
-        uid: data.uid,
-        offers : {
-          offer1 : {
-            image : "https://firebasestorage.googleapis.com/v0/b/salus-4b513.appspot.com/o/SalusPlaceholder.png?alt=media&token=05dc65f5-f5bc-481b-8fb9-b2aee4b1dffc",
-            points : 0,
-            title : "",
-          },
-          offer2 : {
-            image : "https://firebasestorage.googleapis.com/v0/b/salus-4b513.appspot.com/o/SalusPlaceholder.png?alt=media&token=05dc65f5-f5bc-481b-8fb9-b2aee4b1dffc",
-            points : 0,
-            title : "",
-          },
-          offer3 : {
-            image : "https://firebasestorage.googleapis.com/v0/b/salus-4b513.appspot.com/o/SalusPlaceholder.png?alt=media&token=05dc65f5-f5bc-481b-8fb9-b2aee4b1dffc",
-            points : 0,
-            title : "",
-          }
-        },
-      };
-      firebase.database().ref().child('vendors').child(data.uid).update(vendor);
-      browserHistory.push('/');
-    }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      console.log(error.message);
-      displayError(error.message);
-    });
-  }
-  authenticate(username, password, companyName, phoneNumber) {
-    const displayError = (error) => {
-      this.setState({
-        error: error
-      });
-    };
-    if (username == '' || password == '') {
-      displayError('username and password are required.');
-    } else if (password.length < 6) {
-      displayError('Password Minimum Length – 6.');
-    } else {
-      fetch('https://api.stripe.com/v1/customers', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Bearer sk_test_7JptRhoLDP2UzOEaPnaDUmQi'
-        },
-        body: 'email=' + username + '&description=' + username
-      }).then((response) => response.json()).then((responseJson) => {
-        if (responseJson.error) {
-          var errorCode = responseJson.error.code;
-          var errorMessage = responseJson.error.message;
-          console.log(responseJson.error.message);
-          displayError(responseJson.error.message);
-        } else {
-          this.createCard(responseJson.id);
-          console.log(responseJson);
-        }
-      }).catch((error) => {
-        console.error(error);
-      });
-    }
-  }
-
   render() {
+    const salusVendors = this.state.vendors;
 
     return (
       <div className="container-fluid no-breadcrumbs page-dashboard">
@@ -336,38 +130,18 @@ class EditPayment extends Component {
                     <div style={{ marginRight: '10px' }}>
                       <Row style={{ marginTop: '20px', marginBottom: '20px' }}>
                         <Col xs={10} xsOffset={1}>
-                          <div className="CardForm">
-                            <label className="Label SecureStripe"><i className="fa fa-lock" /> Payments securely processed by Stripe</label>
-                            <Row>
-                              <Col md={ 8 }>
-                                <div className="input-group">
-                                                <span className="input-group-addon">
-                                                    <i className="fa fa-credit-card" aria-hidden="true"></i>
-                                                </span>
-                                  <div className="form-group label-floating">
-                                    <label className="control-label">Card number</label>
-                                    <input type="number" value={this.state.cardNumber} onChange={this.handleChangeCardNumber} className="form-control" />
-                                  </div>
-                                </div>
-                              </Col>
-                              <Col md={ 2 }>
-                                <div className="input-group">
-                                  <div className="form-group label-floating">
-                                    <label className="control-label">MM</label>
-                                    <input type="number" value={this.state.expMonth} onChange={this.handleChangeExpMonth} className="form-control" />
-                                  </div>
-                                </div>
-                              </Col>
-                              <Col md={ 2 }>
-                                <div className="input-group">
-                                  <div className="form-group label-floating">
-                                    <label className="control-label">YY</label>
-                                    <input type="number" value={this.state.expYear} onChange={this.handleChangeExpYear} className="form-control" />
-                                  </div>
-                                </div>
-                              </Col>
-                            </Row>
-                          </div>
+                          <BootstrapTable
+                            data={ salusVendors }
+                            striped
+                            hover
+                            condensed
+                            pagination
+                            search>
+                            <TableHeaderColumn dataField='name' dataSort>Manufacturer</TableHeaderColumn>
+                            <TableHeaderColumn dataField='phone' dataSort>Brand Name</TableHeaderColumn>
+                            {/*<TableHeaderColumn dataField='SER_RETAIL' dataSort>Retail Price</TableHeaderColumn>*/}
+                            {/*<TableHeaderColumn isKey dataField='SER_WHOLESALE' dataSort>Wholesale Price</TableHeaderColumn>*/}
+                          </BootstrapTable>
                         </Col>
                       </Row>
                     </div>
@@ -385,4 +159,5 @@ class EditPayment extends Component {
     )
   }
 }
-export default EditPayment;
+
+export default Vendors;

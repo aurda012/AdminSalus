@@ -12,15 +12,15 @@ class NavItem extends Component {
     }
 
 
-    const { router } = this.props
-    const { index, to, children, ...props } = this.props
+    const { router } = this.props;
+    const { index, to, children, ...props } = this.props;
 
-    let isActive
-
-
+    let isActive;
 
 
-    const toLocation = resolveToLocation(to, router)
+
+
+    const toLocation = resolveToLocation(to, router);
 
     /*console.log("toLocation");
     console.log(toLocation);
@@ -42,7 +42,7 @@ class NavItem extends Component {
       }
     }
 
-    const LinkComponent = index ?  IndexLink : Link
+    const LinkComponent = index ?  IndexLink : Link;
 
     return (
       <li className={mostObviousCase ? 'active' : ''}>
@@ -52,6 +52,6 @@ class NavItem extends Component {
   }
 }
 
-NavItem = withRouter(NavItem)
+NavItem = withRouter(NavItem);
 
 export default NavItem

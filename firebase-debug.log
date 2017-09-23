@@ -1,0 +1,43 @@
+[debug] [2017-09-13T00:26:52.585Z] ----------------------------------------------------------------------
+[debug] [2017-09-13T00:26:52.588Z] Command:       /Users/alfredourdaneta/.nvm/versions/node/v6.11.0/bin/node /Users/alfredourdaneta/.nvm/versions/node/v6.11.0/bin/firebase deploy
+[debug] [2017-09-13T00:26:52.588Z] CLI Version:   3.9.2
+[debug] [2017-09-13T00:26:52.588Z] Platform:      darwin
+[debug] [2017-09-13T00:26:52.588Z] Node Version:  v6.11.0
+[debug] [2017-09-13T00:26:52.589Z] Time:          Tue Sep 12 2017 20:26:52 GMT-0400 (EDT)
+[debug] [2017-09-13T00:26:52.589Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-09-13T00:26:52.602Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-09-13T00:26:52.602Z] > authorizing via signed-in user
+[debug] [2017-09-13T00:26:52.604Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/salus-4b513  
+ Tue Sep 12 2017 20:26:52 GMT-0400 (EDT)
+[debug] [2017-09-13T00:26:53.173Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-13T00:26:53.174Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/salus-4b513/tokens  
+ Tue Sep 12 2017 20:26:53 GMT-0400 (EDT)
+[debug] [2017-09-13T00:26:53.631Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'salus-4b513'...
+[info] 
+[info] i  deploying hosting
+[info] i  hosting: preparing build directory for upload...
+[debug] [2017-09-13T00:26:56.226Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/salus-4b513/uploads/-KtscPiAPSEZfhlhCpd1?fileCount=201&message=  
+ Tue Sep 12 2017 20:26:56 GMT-0400 (EDT)
+[debug] [2017-09-13T00:28:55.173Z] <<< HTTP RESPONSE 409
+[debug] [2017-09-13T00:28:55.178Z] <<< HTTP RESPONSE BODY undefined
+[debug] [2017-09-13T00:28:55.181Z] TypeError: Cannot read property 'error' of undefined
+    at module.exports (/Users/alfredourdaneta/.nvm/versions/node/v6.11.0/lib/node_modules/firebase-tools/lib/responseToError.js:10:12)
+    at Request._callback (/Users/alfredourdaneta/.nvm/versions/node/v6.11.0/lib/node_modules/firebase-tools/lib/api.js:39:25)
+    at Request.self.callback (/Users/alfredourdaneta/.nvm/versions/node/v6.11.0/lib/node_modules/firebase-tools/node_modules/request/request.js:188:22)
+    at emitTwo (events.js:106:13)
+    at Request.emit (events.js:191:7)
+    at Request.<anonymous> (/Users/alfredourdaneta/.nvm/versions/node/v6.11.0/lib/node_modules/firebase-tools/node_modules/request/request.js:1171:10)
+    at emitOne (events.js:96:13)
+    at Request.emit (events.js:188:7)
+    at IncomingMessage.<anonymous> (/Users/alfredourdaneta/.nvm/versions/node/v6.11.0/lib/node_modules/firebase-tools/node_modules/request/request.js:1091:12)
+    at IncomingMessage.g (events.js:292:16)
+    at emitNone (events.js:91:20)
+    at IncomingMessage.emit (events.js:185:7)
+    at endReadableNT (_stream_readable.js:974:12)
+    at _combinedTickCallback (internal/process/next_tick.js:80:11)
+    at process._tickCallback (internal/process/next_tick.js:104:9)
+[error] 
+[error] Error: An unexpected error has occurred.

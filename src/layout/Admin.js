@@ -1,11 +1,8 @@
-import React, {Component,PropTypes} from 'react'
-import {Link} from 'react-router'
+import React, { Component } from 'react'
+import { Link } from 'react-router';
 import NavItem from '../components/NavItem'
 import NavBar from '../components/NavBar'
-import { IndexLink } from 'react-router'
 import Config from   '../config/app';
-// import currentUser from  '../config/current-user';
-var md5 = require('md5');
 
 import firebase from '../config/database'
 
@@ -13,7 +10,10 @@ class Master extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {user:{}};
+    this.state = {
+      user:{},
+      companyName: '',
+    };
     this.handleLogout = this.handleLogout.bind(this);
     this.authListener = this.authListener.bind(this);
     this.printMenuItem= this.printMenuItem.bind(this);
@@ -27,17 +27,30 @@ class Master extends Component {
      const setUser=(user)=>{
        this.setState({user:user})
      };
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        setUser(user);
-        // User is signed in.
-        console.log("User has Logged  in Master");
-        console.log(user.email);
-      } else {
-        // No user is signed in.
-        console.log("User has logged out Master");
-      }
-    });
+     const setVendor=(vendor)=>{
+       this.setState({
+         companyName: vendor.name,
+       })
+     };
+
+     firebase.auth().onAuthStateChanged(function(user) {
+       if (user) {
+         setUser(user);
+         // User is signed in.
+         console.log("User has Logged  in Master");
+         var vendorInfo = firebase.database().ref(`vendors/${user.uid}`);
+         vendorInfo.on('value', function(snapshot) {
+           if (snapshot) {
+             const vendor = snapshot.val();
+             setVendor(vendor);
+             console.log()
+           }
+         });
+       } else {
+         // No user is signed in.
+         console.log("User has logged out Master");
+       }
+     });
   }
 
 
@@ -60,7 +73,7 @@ class Master extends Component {
                         <a data-toggle="collapse" href={"#"+menuPath} className="collapsed" aria-expanded="false">
                             <i className="material-icons">{menu.icon}</i>
                             <p>{menu.name}
-                                <b className="caret"></b>
+                                <b className="caret"/>
                             </p>
                         </a>
                         <div className="collapse" id={menuPath} aria-expanded="false">
@@ -72,7 +85,7 @@ class Master extends Component {
                     </li>
         )
     }else{
-      return (<NavItem index={menu.isIndex} onlyActiveOnIndex={menu.isIndex}  to={menu.link+"/"+menuPath}>
+      return (<NavItem index={menu.isIndex} onlyActiveOnIndex={menu.isIndex} key={menu.isIndex}  to={menu.link+"/"+menuPath}>
           <i className="material-icons">{menu.icon}</i>
           <p>{menu.name}</p>
         </NavItem>)
@@ -99,30 +112,16 @@ class Master extends Component {
       {
         "link": "fireadmin",
         "path": "vendors",
-        "name": "Rewards",
-        "icon":"attach_money",
+        "name": "Vendors",
+        "icon":"business_center",
         "tableFields":["name","description"],
-        "subMenus":[
-          {
-            "link": "fireadmin",
-            "path": `vendors/${this.state.user.uid}/offers/offer1`,
-            "name": "Offer 1",
-            "icon":"attach_money",
-            "tableFields":["name","description"]
-          },{
-            "link": "fireadmin",
-            "path": `vendors/${this.state.user.uid}/offers/offer2`,
-            "name": "Offer 2",
-            "icon":"attach_money",
-            "tableFields":["name","description"],
-          },{
-            "link": "fireadmin",
-            "path": `vendors/${this.state.user.uid}/offers/offer3`,
-            "name": "Offer 3",
-            "icon":"attach_money",
-            "tableFields":["name","description"],
-          }
-        ]
+      },
+      {
+        "link": "fireadmin",
+        "path": "users",
+        "name": "Users",
+        "icon":"people",
+        "tableFields":[],
       }
     ];
 
@@ -132,23 +131,17 @@ class Master extends Component {
     return (
       <div className="wrapper">
 
-        <div  id="theSideBar" className="sidebar" has-image="true" data-active-color={Config.adminConfig.design.dataActiveColor} data-background-color={Config.adminConfig.design.dataBackgroundColor}>
+        <div id="theSideBar" className="sidebar" has-image="true" data-active-color={Config.adminConfig.design.dataActiveColor} data-background-color={Config.adminConfig.design.dataBackgroundColor}>
           <div className="sidebar-wrapper">
             <div className="user">
               <div className="photo">
 
                   <img src="assets/img/green.png" />
               </div>
-              <div className="info">
-                <a data-toggle="collapse" href="#collapseExample" className="collapsed">{this.state.user.email}<b className="caret"></b></a>
+              <div className="info" style={{ marginTop: '20px' }}>
+                <a data-toggle="collapse" href="#collapseExample" style={{ fontSize: '16px' }} className="collapsed">{this.state.companyName} <b className="caret"></b></a>
                 <div className="collapse" id="collapseExample">
                     <ul className="nav">
-                        <li>
-                          <a href="/#/edit-profile" >Edit Profile</a>
-                        </li>
-                        <li>
-                          <a href="/#/edit-payment" >Edit Payment</a>
-                        </li>
                         <li>
                             <a onClick={this.handleLogout} >Logout</a>
                         </li>
@@ -162,7 +155,7 @@ class Master extends Component {
           </div>
        
        
-          <div className="sidebar-background"  style={bgStyle}></div>
+          <div className="sidebar-background"  style={bgStyle}/>
 
 
         </div>
